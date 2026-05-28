@@ -13,7 +13,7 @@ if (!loggedIn) {
 
 /* Show bottom nav only when logged in */
 if (loggedIn) {
-  document.getElementById('about-bottom-nav').style.display = 'flex';
+  setActiveNav('about');
 }
 
 /* CTA: always show Browse Roosts  -  goes to home if logged in, login if not */
