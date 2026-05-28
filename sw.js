@@ -1,5 +1,5 @@
 'use strict';
-const CACHE = 'flock-alt-v3';
+const CACHE = 'flock-alt-v4';
 const ASSETS = [
   'index.html','login.html','signup.html','onboarding.html',
   'home.html','events.html','event.html','my-flocks.html','my-events.html','profile.html',

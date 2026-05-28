@@ -11,10 +11,10 @@ function render() {
   const el    = document.getElementById('my-events-container');
   const today = new Date(); today.setHours(0,0,0,0);
 
-  // Collect all meetups the user is attending
+  // Collect all flights the user is attending
   const upcoming = [], past = [];
   FLOCKS.forEach(f => {
-    f.meetups.forEach(m => {
+    f.flights.forEach(m => {
       if (!Flock.isAttending(f.id, m.id)) return;
       const evDate = new Date(m.date + 'T00:00:00');
       const item = { ...m, flockId: f.id, flockName: f.name, flockE: f.e, cat: f.cat };
@@ -30,7 +30,7 @@ function render() {
       <div id="my-events-empty" class="empty-state">
         <div class="empty-icon">📅</div>
         <h3>No events yet</h3>
-        <p>Join a Flock and mark yourself as attending a meetup to see it here.</p>
+        <p>Join a Flock and mark yourself as attending a flight to see it here.</p>
         <a href="events.html" class="btn btn-primary" style="margin-top:8px;max-width:200px;padding:12px;display:block">Browse Events</a>
       </div>`;
     return;

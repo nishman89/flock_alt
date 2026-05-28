@@ -135,9 +135,9 @@ function renderFlocks() {
   items = [...items].sort((a, b) => {
     if (activeSort === 'members') return b.members - a.members;
     if (activeSort === 'name')    return a.name.localeCompare(b.name);
-    // soonest next meetup
-    const nextA = a.meetups[0]?.date || '9999';
-    const nextB = b.meetups[0]?.date || '9999';
+    // soonest next flight
+    const nextA = a.flights[0]?.date || '9999';
+    const nextB = b.flights[0]?.date || '9999';
     return nextA.localeCompare(nextB);
   });
 
@@ -150,7 +150,7 @@ function renderFlocks() {
 
   list.innerHTML = items.map(f => {
     const col    = EV_COLS[f.cat] || '#374151';
-    const next   = f.meetups[0];
+    const next   = f.flights[0];
     const member = Flock.isFlockMember(f.id);
     return `
       <a id="event-card-${f.id}" class="event-card" href="event.html?id=${f.id}">
@@ -167,7 +167,7 @@ function renderFlocks() {
             ${next ? `<span class="meta-item">📍 ${next.venue}</span>` : ''}
           </div>
           <div class="card-foot">
-            <span style="font-size:13px;color:var(--text3)">${f.meetups.length} upcoming meetup${f.meetups.length !== 1 ? 's' : ''}</span>
+            <span style="font-size:13px;color:var(--text3)">${f.flights.length} upcoming Flight${f.flights.length !== 1 ? 's' : ''}</span>
             <span class="card-price">${next?.price === 'Free' ? 'Free' : next?.price || ''}</span>
           </div>
         </div>

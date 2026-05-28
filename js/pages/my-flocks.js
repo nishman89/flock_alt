@@ -30,7 +30,7 @@ function render() {
     </p>
     ${flocks.map(f => {
       const col      = EV_COLS[f.cat] || '#F97316';
-      const upcoming = f.meetups.filter(m => new Date(m.date + 'T00:00:00') >= today);
+      const upcoming = f.flights.filter(m => new Date(m.date + 'T00:00:00') >= today);
       const next     = upcoming[0];
       const attending = next ? Flock.isAttending(f.id, next.id) : false;
       return `
@@ -40,12 +40,12 @@ function render() {
             <div class="my-event-title">${f.e} ${f.name}</div>
             <div class="my-event-meta">
               <span>👥 ${f.members + 1} members</span>
-              <span>${upcoming.length} upcoming meetup${upcoming.length !== 1 ? 's' : ''}</span>
+              <span>${upcoming.length} upcoming Flight${upcoming.length !== 1 ? 's' : ''}</span>
             </div>
             ${next ? `<div class="my-event-venue" style="margin-top:6px">
               Next: ${next.title} &middot; ${fmtDate(next.date)}
               ${attending ? ' <span style="color:var(--ok);font-weight:700">✓ Going</span>' : ''}
-            </div>` : '<div class="my-event-venue">No upcoming meetups</div>'}
+            </div>` : '<div class="my-event-venue">No upcoming Flights</div>'}
           </div>
           <div style="display:flex;align-items:center;padding-right:14px;color:var(--text3)">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>

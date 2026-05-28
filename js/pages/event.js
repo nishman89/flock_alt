@@ -66,8 +66,8 @@ function render() {
         ${fl.tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}
       </div>
 
-      <div class="detail-section-title">Upcoming Meetups (${fl.meetups.length})</div>
-      ${fl.meetups.map((m, i) => meetupCard(m, i, isMember)).join('')}
+      <div class="detail-section-title">Upcoming Flights (${fl.flights.length})</div>
+      ${fl.flights.map((m, i) => flightCard(m, i, isMember)).join('')}
     </div>`;
 
   // CTA - join/leave the group
@@ -81,10 +81,10 @@ function render() {
   // Init maps after render
   Object.keys(_maps).forEach(k => { _maps[k].remove(); });
   _maps = {};
-  setTimeout(() => { fl.meetups.forEach((m, i) => initMap(m, i)); }, 100);
+  setTimeout(() => { fl.flights.forEach((m, i) => initMap(m, i)); }, 100);
 }
 
-function meetupCard(m, i, isMember) {
+function flightCard(m, i, isMember) {
   const attending  = Flock.isAttending(id, m.id);
   const liveGoing  = Flock.getLiveGoing(id, m.id, m.going);
   const spotsLeft  = m.max - liveGoing;
@@ -94,29 +94,29 @@ function meetupCard(m, i, isMember) {
   let btn = '';
   if (isMember) {
     btn = attending
-      ? `<button class="meetup-attend-btn attending" onclick="toggleMeetup('${m.id}','${m.price}')">✓ Going - tap to cancel</button>`
+      ? `<button class="flight-attend-btn attending" onclick="toggleFlight('${m.id}','${m.price}')">✓ Going - tap to cancel</button>`
       : spotsLeft <= 0
-        ? `<button class="meetup-attend-btn full" disabled>Full</button>`
+        ? `<button class="flight-attend-btn full" disabled>Full</button>`
         : isFree
-          ? `<button class="meetup-attend-btn" onclick="toggleMeetup('${m.id}','${m.price}')">Attend this meetup</button>`
-          : `<button class="meetup-attend-btn" onclick="toggleMeetup('${m.id}','${m.price}')">Pay ${m.price} & Attend</button>`;
+          ? `<button class="flight-attend-btn" onclick="toggleFlight('${m.id}','${m.price}')">Attend this Flight</button>`
+          : `<button class="flight-attend-btn" onclick="toggleFlight('${m.id}','${m.price}')">Pay ${m.price} & Attend</button>`;
   } else {
-    btn = `<button class="meetup-attend-btn locked" onclick="promptJoinFirst()">Join Flock to attend</button>`;
+    btn = `<button class="flight-attend-btn locked" onclick="promptJoinFirst()">Join Flock to attend</button>`;
   }
 
   return `
-    <div class="meetup-card" id="meetup-${m.id}">
-      <div class="meetup-header" style="background:${col}20;border-left:4px solid ${col}">
-        <div class="meetup-title">${m.title}</div>
-        <span class="meetup-price ${m.price === 'Free' ? 'free' : ''}">${m.price}</span>
+    <div class="flight-card" id="flight-${m.id}">
+      <div class="flight-header" style="background:${col}20;border-left:4px solid ${col}">
+        <div class="flight-title">${m.title}</div>
+        <span class="flight-price ${m.price === 'Free' ? 'free' : ''}">${m.price}</span>
       </div>
-      <div class="meetup-body">
-        <div class="meetup-meta">
+      <div class="flight-body">
+        <div class="flight-meta">
           <span>📅 ${fmtDate(m.date)}</span>
           <span>🕐 ${m.time}</span>
           <span>⏱ ${m.dur}</span>
         </div>
-        <div class="meetup-meta" style="margin-top:4px">
+        <div class="flight-meta" style="margin-top:4px">
           <span>📍 ${m.venue}</span>
           <span class="${spotsLeft < 5 ? 'txt-err' : 'txt-ok'}">${liveGoing} going · ${spotsLeft <= 0 ? 'Full' : spotsLeft + ' spot' + (spotsLeft === 1 ? '' : 's') + ' left'}</span>
         </div>
@@ -152,7 +152,7 @@ function initMap(m, i) {
 
 function toggleMembership() {
   if (Flock.isFlockMember(id)) {
-    if (confirm('Leave this Flock? You will be removed from all its upcoming meetups.')) {
+    if (confirm('Leave this Flock? You will be removed from all its upcoming Flights.')) {
       Flock.leaveFlock(id);
       render();
     }
@@ -162,26 +162,26 @@ function toggleMembership() {
   }
 }
 
-function toggleMeetup(meetupId, price) {
-  if (Flock.isAttending(id, meetupId)) {
-    if (confirm('Cancel attendance at this meetup?')) {
-      Flock.unattendMeetup(id, meetupId);
+function toggleFlight(flightId, price) {
+  if (Flock.isAttending(id, flightId)) {
+    if (confirm('Cancel attendance at this flight?')) {
+      Flock.unattendFlight(id, flightId);
       render();
     }
   } else {
     const isFree = price === 'Free';
     if (isFree) {
-      Flock.attendMeetup(id, meetupId);
+      Flock.attendFlight(id, flightId);
       render();
     } else {
-      Flock.setCheckoutEvent(id + '_' + meetupId);
+      Flock.setCheckoutEvent(id + '_' + flightId);
       window.location.href = 'checkout-info.html';
     }
   }
 }
 
 function promptJoinFirst() {
-  if (confirm('Join this Flock first to attend meetups?')) {
+  if (confirm('Join this Flock first to attend flights?')) {
     Flock.joinFlock(id);
     render();
   }
@@ -189,7 +189,7 @@ function promptJoinFirst() {
 
 function shareGroup() {
   const url  = location.href;
-  const text = `Check out "${fl.name}" on Flock - ${fl.members} members, ${fl.meetups.length} upcoming meetups`;
+  const text = `Check out "${fl.name}" on Flock - ${fl.members} members, ${fl.flights.length} upcoming Flights`;
   if (navigator.share) {
     navigator.share({ title: fl.name, text, url }).catch(() => {});
   } else {

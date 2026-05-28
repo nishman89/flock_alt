@@ -43,32 +43,32 @@ const Flock = {
   },
   leaveFlock(id) {
     localStorage.setItem('flock_my_flocks', JSON.stringify(this.getMyFlocks().filter(x => x !== id)));
-    // also clear any meetup attendance for this flock
-    const att = this.getMeetupAttendance();
+    // also clear any flight attendance for this flock
+    const att = this.getFlightAttendance();
     Object.keys(att).filter(k => k.startsWith(id + '_')).forEach(k => delete att[k]);
-    localStorage.setItem('flock_meetup_attendance', JSON.stringify(att));
+    localStorage.setItem('flock_flight_attendance', JSON.stringify(att));
   },
   isFlockMember(id) { return this.getMyFlocks().includes(id); },
 
-  /* ── Meetup attendance ───────────────────────────────────── */
-  getMeetupAttendance() {
-    try { return JSON.parse(localStorage.getItem('flock_meetup_attendance') || '{}'); } catch { return {}; }
+  /* ── Flight attendance ───────────────────────────────────── */
+  getFlightAttendance() {
+    try { return JSON.parse(localStorage.getItem('flock_flight_attendance') || '{}'); } catch { return {}; }
   },
-  attendMeetup(flockId, meetupId) {
-    const att = this.getMeetupAttendance();
-    att[flockId + '_' + meetupId] = true;
-    localStorage.setItem('flock_meetup_attendance', JSON.stringify(att));
+  attendFlight(flockId, flightId) {
+    const att = this.getFlightAttendance();
+    att[flockId + '_' + flightId] = true;
+    localStorage.setItem('flock_flight_attendance', JSON.stringify(att));
   },
-  unattendMeetup(flockId, meetupId) {
-    const att = this.getMeetupAttendance();
-    delete att[flockId + '_' + meetupId];
-    localStorage.setItem('flock_meetup_attendance', JSON.stringify(att));
+  unattendFlight(flockId, flightId) {
+    const att = this.getFlightAttendance();
+    delete att[flockId + '_' + flightId];
+    localStorage.setItem('flock_flight_attendance', JSON.stringify(att));
   },
-  isAttending(flockId, meetupId) {
-    return !!this.getMeetupAttendance()[flockId + '_' + meetupId];
+  isAttending(flockId, flightId) {
+    return !!this.getFlightAttendance()[flockId + '_' + flightId];
   },
-  getLiveGoing(flockId, meetupId, base) {
-    return base + (this.isAttending(flockId, meetupId) ? 1 : 0);
+  getLiveGoing(flockId, flightId, base) {
+    return base + (this.isAttending(flockId, flightId) ? 1 : 0);
   },
 
   seedNish() {
@@ -76,14 +76,19 @@ const Flock = {
     this.setInterests(JAGS.interests);
     this.setPrefs(JAGS.prefs);
     if (!localStorage.getItem('flock_nish_seeded')) {
-      localStorage.setItem('flock_my_flocks', '[]');
-      localStorage.setItem('flock_meetup_attendance', '{}');
+      // Nish is already a member of Arsenal Supporters and London Foodies
+      localStorage.setItem('flock_my_flocks', JSON.stringify(['FL001','FL004']));
+      // And attending specific Flights within those Flocks
+      localStorage.setItem('flock_flight_attendance', JSON.stringify({
+        'FL001_M1': true,   // Arsenal vs Spurs - North London Derby
+        'FL004_M1': true,   // Brick Lane Food Tour
+      }));
       localStorage.setItem('flock_nish_seeded', '1');
     }
     this.setOnboarded();
   },
 
-  /* ── Checkout (paid meetups) ─────────────────────────────── */
+  /* ── Checkout (paid flights) ─────────────────────────────── */
   setCheckoutEvent(id) { localStorage.setItem('flock_checkout_event', id); },
   getCheckoutEvent()   { return localStorage.getItem('flock_checkout_event'); },
   clearCheckoutEvent() { localStorage.removeItem('flock_checkout_event'); },
@@ -95,9 +100,9 @@ const Flock = {
   completeCheckout() {
     const key = this.getCheckoutEvent(); // format: "FL001_M2"
     if (key) {
-      const [flockId, meetupId] = key.split('_M');
+      const [flockId, flightId] = key.split('_M');
       this.joinFlock(flockId);
-      this.attendMeetup(flockId, 'M' + meetupId);
+      this.attendFlight(flockId, 'M' + flightId);
     }
     this.clearCheckoutEvent();
     this.clearCheckoutInfo();
