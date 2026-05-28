@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F97316">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Flock">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
+  <title>Flock  -  Sign In</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<!-- Sign-out success banner -->
+<div id="signout-success" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;background:#16A34A;color:#fff;padding:14px 20px;align-items:center;justify-content:center;gap:10px;font-family:sans-serif;font-size:14px;font-weight:600;box-shadow:0 2px 12px rgba(0,0,0,.2)">
+  <span style="font-size:18px">✓</span>
+  Successfully signed out
+</div>
+
+<div class="auth-shell" id="login-page">
+
+  <div class="auth-hero">
+    <div class="auth-logo-wrap">
+      <svg width="52" height="41" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 25 Q9 12 18 18 Q27 12 34 25 L18 17 Z" fill="white"/>
+        <path d="M0 15 Q6 5 13 10 Q20 5 26 15 L13 9 Z" fill="white"/>
+        <path d="M18 8 Q22 2 27 5 Q32 2 36 8 L27 4.5 Z" fill="white"/>
+      </svg>
+    </div>
+    <h1>Flock</h1>
+    <p>Find your flock.</p>
+  </div>
+
+  <div class="auth-card">
+    <h2>Welcome back 👋</h2>
+    <p class="sub">Sign in to find events near you</p>
+
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="login-username">Username</label>
+        <input type="text" id="login-username" name="username"
+               placeholder="Enter your username" autocomplete="username" inputmode="text">
+        <span class="field-error" id="err-login-username">Please enter your username</span>
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password"
+               placeholder="Enter your password" autocomplete="current-password">
+        <span class="field-error" id="err-login-password">Please enter your password</span>
+      </div>
+      <div class="field-error" id="login-error" style="margin-bottom:12px;display:none;padding:9px 12px;background:#FEF2F2;border-radius:8px;border:1px solid #FECACA">
+        Incorrect username or password
+      </div>
+      <button type="submit" id="login-submit-btn" class="btn btn-primary">Sign In</button>
+    </form>
+
+    <div class="auth-link">
+      Don't have an account? <a href="signup.html" id="go-to-signup">Sign up</a>
+    </div>
+
+    <div style="text-align:center;padding-top:10px;border-top:1px solid var(--border);margin-top:10px">
+      <a href="about.html" id="login-about-link" style="font-size:13px;color:var(--primary);font-weight:600;text-decoration:none">What is Flock? →</a>
+    </div>
+
+    <div id="demo-hint" style="margin-top:20px;border-radius:12px;border:1.5px solid #FDE8D0;overflow:hidden">
+      <div style="background:#F97316;padding:8px 14px">
+        <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.06em">Demo Account</span>
+      </div>
+      <div style="background:#FFF8EF;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div>
+          <div style="font-size:11px;color:#A8784A;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Username</div>
+          <div style="font-family:monospace;font-size:16px;font-weight:700;color:#C2410C">nish</div>
+        </div>
+        <div style="width:1px;height:36px;background:#FDE8D0"></div>
+        <div>
+          <div style="font-size:11px;color:#A8784A;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Password</div>
+          <div style="font-family:monospace;font-size:16px;font-weight:700;color:#C2410C">mandal</div>
+        </div>
+        <button onclick="fillDemo()" style="padding:8px 14px;background:#F97316;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0">Fill in</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/state.js"></script>
+<script src="js/pages/login.js"></script>
+<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js'); }</script>
+<script>
+function fillDemo() {
+  document.getElementById('login-username').value = 'nish';
+  document.getElementById('login-password').value = 'mandal';
+}
+</script>
+</body>
+</html>

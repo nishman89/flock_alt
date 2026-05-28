@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F97316">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Flock">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="Make friends through shared events">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
+  <title>Flock  -  Set Up</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="ob-page-bg">
+<div class="ob-shell" id="app">
+
+  <div class="ob-header">
+    <div class="ob-progress">
+      <div class="ob-prog-bar" id="prog-1"></div>
+      <div class="ob-prog-bar" id="prog-2"></div>
+      <div class="ob-prog-bar" id="prog-3"></div>
+    </div>
+    <div class="ob-step-label" id="step-label">Step 1 of 3</div>
+    <div class="ob-step-title" id="step-title">Tell us about yourself</div>
+  </div>
+
+  <div class="content ob-content" id="ob-content"></div>
+
+  <div class="ob-footer">
+    <button class="btn btn-primary" id="next-btn" onclick="nextStep()">Continue</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/pages/onboarding.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}</script>
+</div>
+</body>
+</html>

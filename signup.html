@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F97316">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Flock">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
+  <title>Flock  -  Sign Up</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="auth-shell" id="signup-page">
+
+  <div class="auth-hero">
+    <div class="auth-logo-wrap">
+      <svg width="52" height="41" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 25 Q9 12 18 18 Q27 12 34 25 L18 17 Z" fill="white"/>
+        <path d="M0 15 Q6 5 13 10 Q20 5 26 15 L13 9 Z" fill="white"/>
+        <path d="M18 8 Q22 2 27 5 Q32 2 36 8 L27 4.5 Z" fill="white"/>
+      </svg>
+    </div>
+    <h1>Join Flock</h1>
+    <p>Find your flock.</p>
+  </div>
+
+  <div class="auth-card">
+    <h2>Create your account ✨</h2>
+    <p class="sub">Just a few details to get you started</p>
+
+    <!-- POC notice -->
+    <div class="poc-notice" id="poc-banner">
+      <span class="poc-notice-icon">🚧</span>
+      <p><strong>Proof of concept</strong>  -  your account is stored locally in this browser only and is not saved to any server. Data may be lost if you clear your browser storage.</p>
+    </div>
+
+    <form id="signup-form" novalidate>
+      <div style="display:flex;gap:12px">
+        <div class="field" style="flex:1">
+          <label for="signup-firstname">First Name</label>
+          <input type="text" id="signup-firstname" name="firstname"
+                 placeholder="e.g. Nish" autocomplete="given-name" maxlength="30">
+          <span class="field-error" id="err-signup-firstname">Please enter your first name</span>
+        </div>
+        <div class="field" style="flex:1">
+          <label for="signup-lastname">Last Name</label>
+          <input type="text" id="signup-lastname" name="lastname"
+                 placeholder="e.g. Mandal" autocomplete="family-name" maxlength="30">
+        </div>
+      </div>
+      <div class="field">
+        <label for="signup-username">Username</label>
+        <input type="text" id="signup-username" name="username"
+               placeholder="Choose a unique username" autocomplete="username" inputmode="text">
+        <span class="field-error" id="err-signup-username">Please enter a valid username</span>
+      </div>
+      <div class="field">
+        <label for="signup-password">Password</label>
+        <input type="password" id="signup-password" name="password"
+               placeholder="At least 6 characters" autocomplete="new-password">
+        <span class="field-error" id="err-signup-password">Password must be at least 6 characters</span>
+      </div>
+      <div class="field">
+        <label for="signup-confirm">Confirm Password</label>
+        <input type="password" id="signup-confirm" name="confirm"
+               placeholder="Repeat your password" autocomplete="new-password">
+        <span class="field-error" id="err-signup-confirm">Passwords do not match</span>
+      </div>
+
+      <div class="field-error" id="signup-error"
+           style="margin-bottom:12px;display:none;padding:9px 12px;background:#FEF2F2;border-radius:8px;border:1px solid #FECACA">
+      </div>
+
+      <button type="submit" id="signup-submit-btn" class="btn btn-primary">Create Account</button>
+    </form>
+
+    <div class="auth-link">
+      Already have an account? <a href="login.html" id="go-to-login">Sign in</a>
+    </div>
+
+    <div style="text-align:center;padding-top:10px;border-top:1px solid var(--border);margin-top:10px">
+      <a href="about.html" id="signup-about-link" style="font-size:13px;color:var(--primary);font-weight:600;text-decoration:none">What is Flock? →</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/state.js"></script>
+<script src="js/pages/signup.js"></script>
+<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js'); }</script>
+</body>
+</html>
