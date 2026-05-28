@@ -1117,3 +1117,21 @@ body {
 .meetup-attend-btn.attending { background: var(--ok) }
 .meetup-attend-btn.locked { background: var(--border); color: var(--text3) }
 .meetup-attend-btn.full { background: var(--border); color: var(--text3); cursor: default }
+
+/* ── View toggle (Groups / Events) ───────────────────────── */
+.view-toggle-bar {
+  display: flex; gap: 8px; padding: 10px 16px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.view-toggle-btn {
+  flex: 1; padding: 9px 0; border-radius: var(--rs);
+  border: 1.5px solid var(--border); background: var(--card);
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  color: var(--text2); cursor: pointer; transition: all .15s;
+}
+.view-toggle-btn.active {
+  background: var(--primary); border-color: var(--primary); color: #fff;
+}
+@media (min-width: 768px) {
+  .view-toggle-bar { padding: 10px 28px }
+}
