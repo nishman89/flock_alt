@@ -70,11 +70,6 @@
     </button>
   </div>
 
-  <!-- View toggle -->
-  <div class="view-toggle-bar">
-    <button class="view-toggle-btn active" id="toggle-groups" onclick="setView('groups',this)">🐦 Groups</button>
-    <button class="view-toggle-btn" id="toggle-events" onclick="setView('events',this)">📅 Events</button>
-  </div>
   <div class="cat-scroll" id="cat-scroll">
     <div class="cat-chip active" id="tab-all"      data-cat="All"          onclick="setCat('All',this)">🌟 All</div>
     <div class="cat-chip"        id="tab-sports"   data-cat="Sports"       onclick="setCat('Sports',this)">⚽ Sports</div>
@@ -134,7 +129,7 @@
 
 <script src="js/data.js"></script>
 <script src="js/state.js"></script>
-<script src="js/pages/home.js"></script>
+<script src="js/pages/events.js"></script>
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}</script>
 <script src="js/desktop-sidebar.js"></script>
 <script>

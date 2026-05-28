@@ -8,52 +8,70 @@ function fmtDate(d) {
 }
 
 function render() {
-  const myIds  = Flock.getMyFlocks();
-  const flocks = FLOCKS.filter(f => myIds.includes(f.id));
-  const el     = document.getElementById('my-events-container');
+  const el    = document.getElementById('my-events-container');
+  const today = new Date(); today.setHours(0,0,0,0);
 
-  if (flocks.length === 0) {
+  // Collect all meetups the user is attending
+  const upcoming = [], past = [];
+  FLOCKS.forEach(f => {
+    f.meetups.forEach(m => {
+      if (!Flock.isAttending(f.id, m.id)) return;
+      const evDate = new Date(m.date + 'T00:00:00');
+      const item = { ...m, flockId: f.id, flockName: f.name, flockE: f.e, cat: f.cat };
+      (evDate >= today ? upcoming : past).push(item);
+    });
+  });
+
+  upcoming.sort((a, b) => new Date(a.date) - new Date(b.date));
+  past.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (upcoming.length === 0 && past.length === 0) {
     el.innerHTML = `
       <div id="my-events-empty" class="empty-state">
-        <div class="empty-icon">🐦</div>
-        <h3>No Flocks yet</h3>
-        <p>Discover groups near you and join your first Flock!</p>
-        <a href="home.html" class="btn btn-primary" style="margin-top:8px;max-width:200px;padding:12px;display:block">Browse Flocks</a>
+        <div class="empty-icon">📅</div>
+        <h3>No events yet</h3>
+        <p>Join a Flock and mark yourself as attending a meetup to see it here.</p>
+        <a href="events.html" class="btn btn-primary" style="margin-top:8px;max-width:200px;padding:12px;display:block">Browse Events</a>
       </div>`;
     return;
   }
 
-  el.innerHTML = `
-    <p style="font-size:13px;color:var(--text3);font-weight:600;margin-bottom:12px">
-      ${flocks.length} Flock${flocks.length !== 1 ? 's' : ''} you've joined
-    </p>
-    ${flocks.map(f => {
-      const col        = EV_COLS[f.cat] || '#F97316';
-      const today      = new Date(); today.setHours(0,0,0,0);
-      const upcoming   = f.meetups.filter(m => new Date(m.date + 'T00:00:00') >= today);
-      const next       = upcoming[0];
-      const attending  = next ? Flock.isAttending(f.id, next.id) : false;
-      return `
-        <a class="my-event-card" href="event.html?id=${f.id}">
-          <div class="my-event-accent" style="background:${col}"></div>
-          <div class="my-event-body">
-            <div class="my-event-title">${f.e} ${f.name}</div>
-            <div class="my-event-meta">
-              <span>👥 ${f.members + 1} members</span>
-              <span>${f.meetups.length} meetup${f.meetups.length !== 1 ? 's' : ''}</span>
-            </div>
-            ${next ? `
-              <div class="my-event-venue" style="margin-top:6px;padding:8px 10px;background:var(--bg);border-radius:8px;font-size:12px">
-                <strong>Next:</strong> ${next.title}<br>
-                📅 ${fmtDate(next.date)} · 🕐 ${next.time} · ${next.venue}
-                ${attending ? '<br><span style="color:var(--ok);font-weight:700">✓ You\'re going</span>' : ''}
-              </div>` : '<div class="my-event-venue">No upcoming meetups</div>'}
+  function card(e, isPast) {
+    const col = EV_COLS[e.cat] || '#F97316';
+    return `
+      <a class="my-event-card${isPast ? ' past' : ''}" href="event.html?id=${e.flockId}">
+        <div class="my-event-accent" style="background:${col}"></div>
+        <div class="my-event-body">
+          <div class="my-event-title">${e.flockE} ${e.title}</div>
+          <div class="my-event-meta">
+            <span>📅 ${fmtDate(e.date)}</span>
+            <span>🕐 ${e.time}</span>
           </div>
-          <div style="display:flex;align-items:center;padding-right:14px;color:var(--text3)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-        </a>`;
-    }).join('')}`;
+          <div class="my-event-venue">📍 ${e.venue} &middot; ${e.flockName}</div>
+        </div>
+        <div style="display:flex;align-items:center;padding-right:14px;color:var(--text3)">
+          ${isPast
+            ? '<span style="font-size:11px;font-weight:600">Past</span>'
+            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'}
+        </div>
+      </a>`;
+  }
+
+  let html = '';
+  if (upcoming.length > 0) {
+    html += `<p style="font-size:13px;color:var(--text3);font-weight:600;margin-bottom:12px">
+      ${upcoming.length} event${upcoming.length !== 1 ? 's' : ''} coming up
+    </p><div style="display:flex;flex-direction:column;gap:10px">
+      ${upcoming.map(e => card(e, false)).join('')}
+    </div>`;
+  }
+  if (past.length > 0) {
+    html += `<div class="past-section-title">Past events</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${past.map(e => card(e, true)).join('')}
+    </div>`;
+  }
+  el.innerHTML = html;
 }
 
 render();
