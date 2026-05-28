@@ -47,9 +47,9 @@ function initDesktop() {
     </a>
     <nav class="sb-nav">
       ${navLink('home.html',      'flocks',    'Flocks',    svgs.flocks)}
-      ${navLink('events.html',    'events',    'Events',    svgs.events)}
+      ${navLink('roosts.html',    'roosts',    'Roosts',    svgs.events)}
       ${navLink('my-flocks.html', 'my-flocks', 'My Flocks', svgs.myflocks)}
-      ${navLink('my-events.html', 'my-events', 'My Events', svgs.myevents)}
+      ${navLink('my-roosts.html', 'my-roosts', 'My Roosts', svgs.myevents)}
       ${navLink('profile.html',   'profile',   'Profile',   svgs.profile)}
       ${navLink('about.html',     'about',     'About',     svgs.about)}
       <button id="sidebar-nav-chats" class="sb-link" onclick="showSidebarChatsPopup()" style="background:none;border:none;cursor:pointer;width:100%;text-align:left">${icon(svgs.chats)}<span>Chats</span></button>

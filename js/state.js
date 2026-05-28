@@ -43,32 +43,32 @@ const Flock = {
   },
   leaveFlock(id) {
     localStorage.setItem('flock_my_flocks', JSON.stringify(this.getMyFlocks().filter(x => x !== id)));
-    // also clear any flight attendance for this flock
-    const att = this.getFlightAttendance();
+    // also clear any roost attendance for this flock
+    const att = this.getRoostAttendance();
     Object.keys(att).filter(k => k.startsWith(id + '_')).forEach(k => delete att[k]);
-    localStorage.setItem('flock_flight_attendance', JSON.stringify(att));
+    localStorage.setItem('flock_roost_attendance', JSON.stringify(att));
   },
   isFlockMember(id) { return this.getMyFlocks().includes(id); },
 
-  /* ── Flight attendance ───────────────────────────────────── */
-  getFlightAttendance() {
-    try { return JSON.parse(localStorage.getItem('flock_flight_attendance') || '{}'); } catch { return {}; }
+  /* ── Roost attendance ───────────────────────────────────── */
+  getRoostAttendance() {
+    try { return JSON.parse(localStorage.getItem('flock_roost_attendance') || '{}'); } catch { return {}; }
   },
-  attendFlight(flockId, flightId) {
-    const att = this.getFlightAttendance();
-    att[flockId + '_' + flightId] = true;
-    localStorage.setItem('flock_flight_attendance', JSON.stringify(att));
+  attendRoost(flockId, roostId) {
+    const att = this.getRoostAttendance();
+    att[flockId + '_' + roostId] = true;
+    localStorage.setItem('flock_roost_attendance', JSON.stringify(att));
   },
-  unattendFlight(flockId, flightId) {
-    const att = this.getFlightAttendance();
-    delete att[flockId + '_' + flightId];
-    localStorage.setItem('flock_flight_attendance', JSON.stringify(att));
+  unattendRoost(flockId, roostId) {
+    const att = this.getRoostAttendance();
+    delete att[flockId + '_' + roostId];
+    localStorage.setItem('flock_roost_attendance', JSON.stringify(att));
   },
-  isAttending(flockId, flightId) {
-    return !!this.getFlightAttendance()[flockId + '_' + flightId];
+  isAttending(flockId, roostId) {
+    return !!this.getRoostAttendance()[flockId + '_' + roostId];
   },
-  getLiveGoing(flockId, flightId, base) {
-    return base + (this.isAttending(flockId, flightId) ? 1 : 0);
+  getLiveGoing(flockId, roostId, base) {
+    return base + (this.isAttending(flockId, roostId) ? 1 : 0);
   },
 
   seedNish() {
@@ -78,8 +78,8 @@ const Flock = {
     if (!localStorage.getItem('flock_nish_seeded')) {
       // Nish is already a member of Arsenal Supporters and London Foodies
       localStorage.setItem('flock_my_flocks', JSON.stringify(['FL001','FL004']));
-      // And attending specific Flights within those Flocks
-      localStorage.setItem('flock_flight_attendance', JSON.stringify({
+      // And attending specific Roosts within those Flocks
+      localStorage.setItem('flock_roost_attendance', JSON.stringify({
         'FL001_M1': true,   // Arsenal vs Spurs - North London Derby
         'FL004_M1': true,   // Brick Lane Food Tour
       }));
@@ -88,7 +88,7 @@ const Flock = {
     this.setOnboarded();
   },
 
-  /* ── Checkout (paid flights) ─────────────────────────────── */
+  /* ── Checkout (paid roosts) ─────────────────────────────── */
   setCheckoutEvent(id) { localStorage.setItem('flock_checkout_event', id); },
   getCheckoutEvent()   { return localStorage.getItem('flock_checkout_event'); },
   clearCheckoutEvent() { localStorage.removeItem('flock_checkout_event'); },
@@ -100,9 +100,9 @@ const Flock = {
   completeCheckout() {
     const key = this.getCheckoutEvent(); // format: "FL001_M2"
     if (key) {
-      const [flockId, flightId] = key.split('_M');
+      const [flockId, roostId] = key.split('_M');
       this.joinFlock(flockId);
-      this.attendFlight(flockId, 'M' + flightId);
+      this.attendRoost(flockId, 'M' + roostId);
     }
     this.clearCheckoutEvent();
     this.clearCheckoutInfo();

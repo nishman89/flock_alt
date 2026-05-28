@@ -66,8 +66,8 @@ function render() {
         ${fl.tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}
       </div>
 
-      <div class="detail-section-title">Upcoming Flights (${fl.flights.length})</div>
-      ${fl.flights.map((m, i) => flightCard(m, i, isMember)).join('')}
+      <div class="detail-section-title">Upcoming Roosts (${fl.roosts.length})</div>
+      ${fl.roosts.map((m, i) => roostCard(m, i, isMember)).join('')}
     </div>`;
 
   // CTA - join/leave the group
@@ -81,10 +81,10 @@ function render() {
   // Init maps after render
   Object.keys(_maps).forEach(k => { _maps[k].remove(); });
   _maps = {};
-  setTimeout(() => { fl.flights.forEach((m, i) => initMap(m, i)); }, 100);
+  setTimeout(() => { fl.roosts.forEach((m, i) => initMap(m, i)); }, 100);
 }
 
-function flightCard(m, i, isMember) {
+function roostCard(m, i, isMember) {
   const attending  = Flock.isAttending(id, m.id);
   const liveGoing  = Flock.getLiveGoing(id, m.id, m.going);
   const spotsLeft  = m.max - liveGoing;
@@ -94,34 +94,36 @@ function flightCard(m, i, isMember) {
   let btn = '';
   if (isMember) {
     btn = attending
-      ? `<button class="flight-attend-btn attending" onclick="toggleFlight('${m.id}','${m.price}')">✓ Going - tap to cancel</button>`
+      ? `<button class="roost-attend-btn attending" onclick="toggleRoost('${m.id}','${m.price}')">✓ Going - tap to cancel</button>`
       : spotsLeft <= 0
-        ? `<button class="flight-attend-btn full" disabled>Full</button>`
+        ? `<button class="roost-attend-btn full" disabled>Full</button>`
         : isFree
-          ? `<button class="flight-attend-btn" onclick="toggleFlight('${m.id}','${m.price}')">Attend this Flight</button>`
-          : `<button class="flight-attend-btn" onclick="toggleFlight('${m.id}','${m.price}')">Pay ${m.price} & Attend</button>`;
+          ? `<button class="roost-attend-btn" onclick="toggleRoost('${m.id}','${m.price}')">Attend this Roost</button>`
+          : `<button class="roost-attend-btn" onclick="toggleRoost('${m.id}','${m.price}')">Pay ${m.price} & Attend</button>`;
   } else {
-    btn = `<button class="flight-attend-btn locked" onclick="promptJoinFirst()">Join Flock to attend</button>`;
+    btn = `<button class="roost-attend-btn locked" onclick="promptJoinFirst()">Join Flock to attend</button>`;
   }
 
   return `
-    <div class="flight-card" id="flight-${m.id}">
-      <div class="flight-header" style="background:${col}20;border-left:4px solid ${col}">
-        <div class="flight-title">${m.title}</div>
-        <span class="flight-price ${m.price === 'Free' ? 'free' : ''}">${m.price}</span>
+    <div class="roost-card" id="roost-${m.id}">
+      <div class="roost-header" style="background:${col}18;border-left:4px solid ${col}">
+        <div class="roost-title">${m.title}</div>
+        <span class="roost-price ${m.price === 'Free' ? 'free' : ''}">${m.price}</span>
       </div>
-      <div class="flight-body">
-        <div class="flight-meta">
+      <div class="roost-body">
+        <div class="roost-meta" style="margin-top:12px">
           <span>📅 ${fmtDate(m.date)}</span>
           <span>🕐 ${m.time}</span>
           <span>⏱ ${m.dur}</span>
         </div>
-        <div class="flight-meta" style="margin-top:4px">
+        <div class="roost-meta" style="margin-top:6px">
           <span>📍 ${m.venue}</span>
-          <span class="${spotsLeft < 5 ? 'txt-err' : 'txt-ok'}">${liveGoing} going · ${spotsLeft <= 0 ? 'Full' : spotsLeft + ' spot' + (spotsLeft === 1 ? '' : 's') + ' left'}</span>
+          <span class="${spotsLeft <= 0 ? 'txt-err' : spotsLeft < 5 ? 'txt-err' : 'txt-ok'}">
+            ${liveGoing} going &middot; ${spotsLeft <= 0 ? 'Full' : spotsLeft + ' spot' + (spotsLeft === 1 ? '' : 's') + ' left'}
+          </span>
         </div>
-        <div class="detail-map-wrap" style="margin-top:12px;margin-bottom:12px">
-          <div id="map-${m.id}" style="height:160px;width:100%;background:var(--bg)"></div>
+        <div class="detail-map-wrap" style="margin-top:14px;margin-bottom:0">
+          <div id="map-${m.id}" style="height:170px;width:100%;background:var(--bg)"></div>
           <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(m.addr)}"
              target="_blank" rel="noopener" class="detail-directions-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
@@ -152,7 +154,7 @@ function initMap(m, i) {
 
 function toggleMembership() {
   if (Flock.isFlockMember(id)) {
-    if (confirm('Leave this Flock? You will be removed from all its upcoming Flights.')) {
+    if (confirm('Leave this Flock? You will be removed from all its upcoming Roosts.')) {
       Flock.leaveFlock(id);
       render();
     }
@@ -162,26 +164,26 @@ function toggleMembership() {
   }
 }
 
-function toggleFlight(flightId, price) {
-  if (Flock.isAttending(id, flightId)) {
-    if (confirm('Cancel attendance at this flight?')) {
-      Flock.unattendFlight(id, flightId);
+function toggleRoost(roostId, price) {
+  if (Flock.isAttending(id, roostId)) {
+    if (confirm('Cancel attendance at this roost?')) {
+      Flock.unattendRoost(id, roostId);
       render();
     }
   } else {
     const isFree = price === 'Free';
     if (isFree) {
-      Flock.attendFlight(id, flightId);
+      Flock.attendRoost(id, roostId);
       render();
     } else {
-      Flock.setCheckoutEvent(id + '_' + flightId);
+      Flock.setCheckoutEvent(id + '_' + roostId);
       window.location.href = 'checkout-info.html';
     }
   }
 }
 
 function promptJoinFirst() {
-  if (confirm('Join this Flock first to attend flights?')) {
+  if (confirm('Join this Flock first to attend roosts?')) {
     Flock.joinFlock(id);
     render();
   }
@@ -189,7 +191,7 @@ function promptJoinFirst() {
 
 function shareGroup() {
   const url  = location.href;
-  const text = `Check out "${fl.name}" on Flock - ${fl.members} members, ${fl.flights.length} upcoming Flights`;
+  const text = `Check out "${fl.name}" on Flock - ${fl.members} members, ${fl.roosts.length} upcoming Roosts`;
   if (navigator.share) {
     navigator.share({ title: fl.name, text, url }).catch(() => {});
   } else {

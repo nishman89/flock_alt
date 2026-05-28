@@ -93,7 +93,7 @@ function render() {
       ${(noMatches ? FLOCKS.slice(0,4) : suggested).map(f => {
         const col     = EV_COLS[f.cat] || '#374151';
         const joined  = selectedFlocks.has(f.id);
-        const nextFlight = f.flights?.[0] || f.meetups?.[0];
+        const nextRoost = f.roosts?.[0] || f.meetups?.[0];
         return `
           <div class="ob-flock-card ${joined ? 'joined' : ''}" onclick="toggleSuggestedFlock('${f.id}',this)"
                style="border-color:${joined ? 'var(--primary)' : 'var(--border)'}">

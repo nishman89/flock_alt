@@ -1090,33 +1090,46 @@ body {
 .btn-chat:hover { background: var(--bg) }
 
 /* ══════════════════════════════════════════════════════════
-   MEETUP CARDS (flock_alt)
+   ROOST CARDS (flock_alt)
 ══════════════════════════════════════════════════════════ */
-.meetup-card {
+.roost-card {
   background: var(--card); border: 1.5px solid var(--border);
-  border-radius: var(--r); margin-bottom: 16px; overflow: hidden;
+  border-radius: var(--r); margin-bottom: 20px; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
 }
-.meetup-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 14px; gap: 8px;
+.roost-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 14px 16px; gap: 10px;
 }
-.meetup-title { font-size: 14px; font-weight: 700; color: var(--text); flex: 1 }
-.meetup-price {
-  font-size: 12px; font-weight: 700; color: var(--text2);
-  background: var(--bg); padding: 3px 8px; border-radius: 8px; white-space: nowrap;
+.roost-title { font-size: 15px; font-weight: 700; color: var(--text); flex: 1; line-height: 1.3 }
+.roost-price {
+  font-size: 12px; font-weight: 700; color: var(--primary-dk);
+  background: var(--primary-lt); padding: 4px 10px; border-radius: 20px;
+  white-space: nowrap; flex-shrink: 0; margin-top: 2px;
 }
-.meetup-price.free { color: var(--ok); background: #F0FDF4 }
-.meetup-body { padding: 12px 14px }
-.meetup-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--text2) }
-.meetup-attend-btn {
-  width: 100%; padding: 12px; border-radius: var(--rs);
-  background: var(--primary); color: #fff; border: none;
-  font-family: var(--font); font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: opacity .15s; margin-top: 4px;
+.roost-price.free { color: var(--ok); background: #F0FDF4 }
+.roost-body { padding: 0 16px 14px }
+.roost-meta {
+  display: flex; flex-wrap: wrap; gap: 6px 14px;
+  font-size: 13px; color: var(--text2); margin-bottom: 4px;
 }
-.meetup-attend-btn.attending { background: var(--ok) }
-.meetup-attend-btn.locked { background: var(--border); color: var(--text3) }
-.meetup-attend-btn.full { background: var(--border); color: var(--text3); cursor: default }
+.roost-attend-btn {
+  width: 100%; padding: 13px; border-radius: var(--rs);
+  background: var(--primary); color: #fff; border: 1.5px solid transparent;
+  font-family: var(--font); font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: opacity .15s; margin-top: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.roost-attend-btn:hover { opacity: .88 }
+.roost-attend-btn.attending {
+  background: #F0FDF4; color: var(--ok); border-color: #BBF7D0;
+}
+.roost-attend-btn.locked {
+  background: var(--bg); color: var(--text3); border-color: var(--border); cursor: default;
+}
+.roost-attend-btn.full {
+  background: var(--bg); color: var(--text3); border-color: var(--border); cursor: default;
+}
 
 /* ── View toggle (Groups / Events) ───────────────────────── */
 .view-toggle-bar {

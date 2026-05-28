@@ -1,6 +1,6 @@
 'use strict';
 Flock.requireAuth();
-setActiveNav('my-events');
+setActiveNav('my-roosts');
 
 function fmtDate(d) {
   const dt = new Date(d + 'T00:00:00');
@@ -8,13 +8,13 @@ function fmtDate(d) {
 }
 
 function render() {
-  const el    = document.getElementById('my-events-container');
+  const el    = document.getElementById('my-roosts-container');
   const today = new Date(); today.setHours(0,0,0,0);
 
-  // Collect all flights the user is attending
+  // Collect all roosts the user is attending
   const upcoming = [], past = [];
   FLOCKS.forEach(f => {
-    f.flights.forEach(m => {
+    f.roosts.forEach(m => {
       if (!Flock.isAttending(f.id, m.id)) return;
       const evDate = new Date(m.date + 'T00:00:00');
       const item = { ...m, flockId: f.id, flockName: f.name, flockE: f.e, cat: f.cat };
@@ -27,11 +27,11 @@ function render() {
 
   if (upcoming.length === 0 && past.length === 0) {
     el.innerHTML = `
-      <div id="my-events-empty" class="empty-state">
+      <div id="my-roosts-empty" class="empty-state">
         <div class="empty-icon">📅</div>
         <h3>No events yet</h3>
-        <p>Join a Flock and mark yourself as attending a flight to see it here.</p>
-        <a href="events.html" class="btn btn-primary" style="margin-top:8px;max-width:200px;padding:12px;display:block">Browse Events</a>
+        <p>Join a Flock and mark yourself as attending a roost to see it here.</p>
+        <a href="roosts.html" class="btn btn-primary" style="margin-top:8px;max-width:200px;padding:12px;display:block">Browse Roosts</a>
       </div>`;
     return;
   }

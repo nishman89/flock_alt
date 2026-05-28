@@ -1,6 +1,6 @@
 'use strict';
 Flock.requireAuth();
-setActiveNav('events');
+setActiveNav('roosts');
 
 const prefs   = Flock.getPrefs();
 const profile = Flock.getProfile();
@@ -64,7 +64,7 @@ function render() {
   FLOCKS.forEach(f => {
     if (f.city !== activeCity) return;
     if (activeCat !== 'All' && f.cat !== activeCat) return;
-    f.flights.forEach(m => {
+    f.roosts.forEach(m => {
       if (new Date(m.date + 'T00:00:00') < today) return;
       if (searchQuery) {
         const hay = [m.title, f.name, m.venue, ...(f.tags||[])].join(' ').toLowerCase();
